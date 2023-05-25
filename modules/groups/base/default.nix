@@ -13,6 +13,12 @@ in {
     enable = mkBoolOpt false "whether or not enable Base group";
   };
   config = mkIf cfg.enable {
+    i18n.defaultLocale = "en_US.UTF-8";
+    console = {
+      font = "Lat2-Terminus16";
+      keyMap = "us";
+      useXkbConfig = true; # use xkbOptions in tty.
+    };
     nix-next = {
       groups = {
         utils = {

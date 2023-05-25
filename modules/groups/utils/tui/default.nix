@@ -26,6 +26,7 @@ in {
       macchina
       sptlrx
       macchanger
+      git
       iw
       wget
       terminal-colors

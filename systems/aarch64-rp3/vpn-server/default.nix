@@ -11,10 +11,9 @@
     ./hardware.nix
   ];
 
-  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
-  boot.loader.grub.enable = false;
-  # Enables the generation of /boot/extlinux/extlinux.conf
-  boot.loader.generic-extlinux-compatible.enable = true;
+  nix-next = {
+    archtyps.rasp3 = enabled;
+  };
 
   networking.hostName = "vip-0"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -23,52 +22,6 @@
 
   # Set your time zone.
   time.timeZone = "Africa/Cairo";
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
-    useXkbConfig = true; # use xkbOptions in tty.
-  };
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e,caps:escape";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.pi = {
-    isNormalUser = true;
-    extraGroups = ["wheel"]; # Enable ‘sudo’ for the user.
-  };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you

@@ -13,6 +13,10 @@ in {
     enable = mkBoolOpt false "whether or not enable Utils group";
   };
   config = mkIf cfg.enable {
+    # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
+    boot.loader.grub.enable = false;
+    # Enables the generation of /boot/extlinux/extlinux.conf
+    boot.loader.generic-extlinux-compatible.enable = true;
     nix-next = {
       groups = {
         base = enabled;
@@ -32,6 +36,8 @@ in {
           password = "root";
         };
         pi = {
+          isNormalUser = true;
+          extraGroups = ["wheel"];
           openssh = {
             authorizedKeys = {
               keys = [
