@@ -29,6 +29,11 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs: let
@@ -46,8 +51,18 @@
         };
         groups.base.enable = true;
       };
-      # overlays = with inputs; [
-      #   home-manager.overlay
-      # ];
+      overlays = with inputs; [
+        home-manager.overlay
+        flake.overlay
+      ];
+      systems.modules = with inputs; [
+        home-manager.nixosModules.home-manager
+        nix-ld.nixosModules.nix-ld
+      ];
+      systems.hosts.vpn-server.modules = with inputs; [
+        nixos-hardware.nixosModules.framework
+      ];
+      deploy = lib.mkDeploy {inherit (inputs) self;};
+      checks = builtins.mapAttrs (system: deploy-lib: deploy-lib.deployChecks inputs.self.deploy) inputs.deploy-rs.lib;
     };
 }
