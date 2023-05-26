@@ -1,13 +1,17 @@
-{ options, config, pkgs, lib, ... }:
-
-with lib;
-with lib.internal;
-let cfg = config.plusultra.system.fonts;
-in
 {
-  options.plusultra.system.fonts = with types; {
+  options,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.system.fonts;
+in {
+  options.x-next.system.fonts = with types; {
     enable = mkBoolOpt false "Whether or not to manage fonts.";
-    fonts = mkOpt (listOf package) [ ] "Custom font packages to install.";
+    fonts = mkOpt (listOf package) [] "Custom font packages to install.";
   };
 
   config = mkIf cfg.enable {
@@ -16,7 +20,7 @@ in
       LOG_ICONS = "true";
     };
 
-    environment.systemPackages = with pkgs; [ font-manager ];
+    environment.systemPackages = with pkgs; [font-manager];
 
     fonts.fonts = with pkgs;
       [
@@ -24,7 +28,8 @@ in
         noto-fonts-cjk-sans
         noto-fonts-cjk-serif
         noto-fonts-emoji
-        (nerdfonts.override { fonts = [ "Hack" ]; })
-      ] ++ cfg.fonts;
+        (nerdfonts.override {fonts = ["Hack"];})
+      ]
+      ++ cfg.fonts;
   };
 }

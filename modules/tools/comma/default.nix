@@ -1,21 +1,24 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
-let
-  cfg = config.plusultra.tools.comma;
-in
 {
-  options.plusultra.tools.comma = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.tools.comma;
+in {
+  options.x-next.tools.comma = with types; {
     enable = mkBoolOpt false "Whether or not to enable comma.";
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       comma
-      plusultra.nix-update-index
+      x-next.nix-update-index
     ];
 
-    plusultra.home.extraOptions = { programs.nix-index.enable = true; };
+    x-next.home.extraOptions = {programs.nix-index.enable = true;};
   };
 }

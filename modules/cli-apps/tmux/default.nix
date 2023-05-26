@@ -1,9 +1,13 @@
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.internal;
-let
-  cfg = config.plusultra.cli-apps.tmux;
+with lib.internal; let
+  cfg = config.x-next.cli-apps.tmux;
   configFiles = lib.snowfall.fs.get-files ./config;
 
   # Extrakto with wl-clipboard patched in.
@@ -16,13 +20,11 @@ let
       rev = "de8ac3e8a9fa887382649784ed8cae81f5757f77";
       sha256 = "0mkp9r6mipdm7408w7ls1vfn6i3hj19nmir2bvfcp12b69zlzc47";
     };
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [pkgs.makeWrapper];
     postInstall = ''
       for f in extrakto.sh open.sh tmux-extrakto.sh; do
         wrapProgram $target/scripts/$f \
-          --prefix PATH : ${with pkgs; lib.makeBinPath (
-          [ pkgs.fzf pkgs.python3 pkgs.xclip wl-clipboard ]
-          )}
+          --prefix PATH : ${with pkgs; lib.makeBinPath [pkgs.fzf pkgs.python3 pkgs.xclip wl-clipboard]}
       done
     '';
     meta = {
@@ -34,22 +36,21 @@ let
   };
 
   plugins =
-    [ extrakto ] ++
-    (with pkgs.tmuxPlugins; [
+    [extrakto]
+    ++ (with pkgs.tmuxPlugins; [
       continuum
       nord
       tilish
       tmux-fzf
       vim-tmux-navigator
     ]);
-in
-{
-  options.plusultra.cli-apps.tmux = with types; {
+in {
+  options.x-next.cli-apps.tmux = with types; {
     enable = mkBoolOpt false "Whether or not to enable tmux.";
   };
 
   config = mkIf cfg.enable {
-    plusultra.home.extraOptions = {
+    x-next.home.extraOptions = {
       programs.tmux = {
         enable = true;
         terminal = "screen-256color-bce";
@@ -57,7 +58,8 @@ in
         historyLimit = 2000;
         keyMode = "vi";
         newSession = true;
-        extraConfig = builtins.concatStringsSep "\n"
+        extraConfig =
+          builtins.concatStringsSep "\n"
           (builtins.map lib.strings.fileContents configFiles);
 
         inherit plugins;

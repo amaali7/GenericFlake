@@ -1,8 +1,11 @@
-{ pkgs, lib, inputs, ... }:
-
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 with lib;
-with lib.internal;
-let
+with lib.internal; let
   gpgConf = "${inputs.gpg-base-conf}/gpg.conf";
 
   gpgAgentConf = ''
@@ -18,7 +21,7 @@ let
     sha256 = "1h48yqffpaz437f3c9hfryf23r95rr319lrb3y79kxpxbc9hihxb";
   };
 
-  guideHTML = pkgs.runCommand "yubikey-guide" { } ''
+  guideHTML = pkgs.runCommand "yubikey-guide" {} ''
     ${pkgs.pandoc}/bin/pandoc \
       --standalone \
       --metadata title="Yubikey Guide" \
@@ -38,16 +41,15 @@ let
     genericName = "View Yubikey Guide in a web browser";
     exec = "${pkgs.xdg-utils}/bin/xdg-open ${guideHTML}";
     icon = lib.snowfall.fs.get-file "modules/security/gpg/yubico-icon.svg";
-    categories = [ "System" ];
+    categories = ["System"];
   };
 
   reload-yubikey = pkgs.writeShellScriptBin "reload-yubikey" ''
     ${pkgs.gnupg}/bin/gpg-connect-agent "scd serialno" "learn --force" /bye
   '';
-in
-{
+in {
   services.pcscd.enable = true;
-  services.udev.packages = with pkgs; [ yubikey-personalization ];
+  services.udev.packages = with pkgs; [yubikey-personalization];
 
   environment.systemPackages = with pkgs; [
     cryptsetup
@@ -69,7 +71,7 @@ in
     };
   };
 
-  plusultra = {
+  x-next = {
     nix = enabled;
 
     desktop = {
@@ -108,7 +110,7 @@ in
       };
     };
 
-    security = { doas = enabled; };
+    security = {doas = enabled;};
 
     system = {
       fonts = enabled;
@@ -124,5 +126,5 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "21.11"; # Did you read the comment?
+  system.stateVersion = "23.05"; # Did you read the comment?
 }

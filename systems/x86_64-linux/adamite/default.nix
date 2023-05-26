@@ -1,8 +1,11 @@
-{ lib, pkgs, modulesPath, ... }:
-
-with lib;
-with lib.internal;
 {
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
+with lib;
+with lib.internal; {
   imports = [
     (modulesPath + "/virtualisation/digital-ocean-config.nix")
   ];
@@ -18,7 +21,7 @@ with lib.internal;
     443
   ];
 
-  plusultra = {
+  x-next = {
     nix = enabled;
 
     cli-apps = {
@@ -57,5 +60,5 @@ with lib.internal;
     };
   };
 
-  system.stateVersion = "21.11";
+  system.stateVersion = "23.05";
 }

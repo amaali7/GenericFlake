@@ -1,11 +1,15 @@
-{ options, config, pkgs, lib, ... }:
-
-with lib;
-with lib.internal;
-let cfg = config.plusultra.tools.qmk;
-in
 {
-  options.plusultra.tools.qmk = with types; {
+  options,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.tools.qmk;
+in {
+  options.x-next.tools.qmk = with types; {
     enable = mkBoolOpt false "Whether or not to enable QMK";
   };
 

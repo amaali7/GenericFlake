@@ -1,21 +1,24 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
-let
-  cfg = config.plusultra.suites.common-slim;
-in
 {
-  options.plusultra.suites.common-slim = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.suites.common-slim;
+in {
+  options.x-next.suites.common-slim = with types; {
     enable = mkBoolOpt false "Whether or not to enable common-slim configuration.";
   };
 
   config = mkIf cfg.enable {
     environment.systemPackages = [
-      pkgs.plusultra.list-iommu
+      pkgs.x-next.list-iommu
     ];
 
-    plusultra = {
+    x-next = {
       nix = enabled;
 
       cli-apps = {

@@ -1,16 +1,18 @@
-{ config, lib, pkgs, ... }:
-
-let
-  cfg = config.plusultra.tools.icehouse;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  cfg = config.x-next.tools.icehouse;
 
   inherit (lib) mkEnableOption mkIf;
-in
-{
-  options.plusultra.tools.icehouse = {
+in {
+  options.x-next.tools.icehouse = {
     enable = mkEnableOption "Icehouse";
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.snowfallorg.icehouse ];
+    environment.systemPackages = [pkgs.snowfallorg.icehouse];
   };
 }

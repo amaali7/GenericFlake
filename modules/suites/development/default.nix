@@ -1,9 +1,13 @@
-{ options, config, lib, pkgs, ... }:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.internal;
-let
-  cfg = config.plusultra.suites.development;
+with lib.internal; let
+  cfg = config.x-next.suites.development;
   apps = {
     vscode = enabled;
     yubikey = enabled;
@@ -14,10 +18,10 @@ let
     yubikey = enabled;
     prisma = enabled;
   };
-in
-{
-  options.plusultra.suites.development = with types; {
-    enable = mkBoolOpt false
+in {
+  options.x-next.suites.development = with types; {
+    enable =
+      mkBoolOpt false
       "Whether or not to enable common development configuration.";
   };
 
@@ -30,7 +34,7 @@ in
       8081
     ];
 
-    plusultra = {
+    x-next = {
       inherit apps cli-apps;
 
       tools = {
@@ -44,7 +48,7 @@ in
         qmk = enabled;
       };
 
-      virtualisation = { podman = enabled; };
+      virtualisation = {podman = enabled;};
     };
   };
 }

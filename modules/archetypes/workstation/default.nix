@@ -1,16 +1,21 @@
-{ options, config, lib, pkgs, ... }:
-with lib;
-with lib.internal;
-let cfg = config.plusultra.archetypes.workstation;
-in
 {
-  options.plusultra.archetypes.workstation = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.archetypes.workstation;
+in {
+  options.x-next.archetypes.workstation = with types; {
     enable =
       mkBoolOpt false "Whether or not to enable the workstation archetype.";
   };
 
   config = mkIf cfg.enable {
-    plusultra = {
+    x-next = {
       suites = {
         common = enabled;
         desktop = enabled;

@@ -1,12 +1,14 @@
-{ pkgs, lib, ... }:
-
-with lib;
-with lib.internal;
 {
-  plusultra = {
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+with lib.internal; {
+  x-next = {
     nix = enabled;
 
-    cli-apps = { neovim = enabled; };
+    cli-apps = {neovim = enabled;};
 
     tools = {
       misc = enabled;
@@ -14,9 +16,9 @@ with lib.internal;
       http = enabled;
     };
 
-    hardware = { networking = enabled; };
+    hardware = {networking = enabled;};
 
-    security = { doas = enabled; };
+    security = {doas = enabled;};
 
     system = {
       fonts = enabled;
@@ -32,5 +34,5 @@ with lib.internal;
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "21.11"; # Did you read the comment?
+  system.stateVersion = "23.05"; # Did you read the comment?
 }

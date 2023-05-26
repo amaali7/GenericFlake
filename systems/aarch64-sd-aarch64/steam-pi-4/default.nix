@@ -1,12 +1,17 @@
-{ pkgs, config, lib, modulesPath, inputs, ... }:
-
+{
+  pkgs,
+  config,
+  lib,
+  modulesPath,
+  inputs,
+  ...
+}:
 with lib;
-with lib.internal;
-let
+with lib.internal; let
   steam-pi-setup = pkgs.writeShellApplication {
     name = "steam-pi-setup";
     checkPhase = "";
-    runtimeInputs = with pkgs; [ slides ];
+    runtimeInputs = with pkgs; [slides];
     text = ''
       slides ${./slides.md}
     '';
@@ -15,7 +20,7 @@ let
   start-steam = pkgs.writeShellApplication {
     name = "start-steam";
     checkPhase = "";
-    runtimeInputs = with pkgs; [ gamescope ];
+    runtimeInputs = with pkgs; [gamescope];
     text = ''
       if ! [ -d ~/.local/share/Steam ]; then
         xterm "${steam-pi-setup}/bin/steam-pi-setup" &
@@ -25,8 +30,7 @@ let
       gamescope -f -- steam -gamepadui
     '';
   };
-in
-{
+in {
   imports = with inputs.nixos-hardware.nixosModules; [
     (modulesPath + "/installer/scan/not-detected.nix")
     raspberry-pi-4
@@ -48,7 +52,7 @@ in
 
     displayManager = {
       defaultSession = "none+openbox";
-      autoLogin.user = config.plusultra.user.name;
+      autoLogin.user = config.x-next.user.name;
 
       lightdm = {
         enable = true;
@@ -62,7 +66,7 @@ in
     numix-gtk-theme
   ];
 
-  plusultra = {
+  x-next = {
     suites = {
       common = enabled;
     };
@@ -74,7 +78,7 @@ in
     };
 
     hardware = {
-      audio.extra-packages = [ ];
+      audio.extra-packages = [];
     };
 
     services = {
@@ -104,5 +108,5 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "21.11"; # Did you read the comment?
+  system.stateVersion = "23.05"; # Did you read the comment?
 }

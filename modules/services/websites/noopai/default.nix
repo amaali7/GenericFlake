@@ -1,16 +1,18 @@
-{ lib, pkgs, config, ... }:
-
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}: let
   inherit (lib) mkIf mkEnableOption fetchFromGitHub foldl;
   inherit (lib.internal) mkOpt;
 
-  cfg = config.plusultra.services.websites.noop-ai;
-in
-{
-  options.plusultra.services.websites.noop-ai = with lib.types; {
+  cfg = config.x-next.services.websites.noop-ai;
+in {
+  options.x-next.services.websites.noop-ai = with lib.types; {
     enable = mkEnableOption "noop.ai Website";
     package = mkOpt package pkgs.noop-ai-website "The site package to use.";
-    domains = mkOpt (listOf str) [ "noop.ai" ] "The domain to serve the website site on.";
+    domains = mkOpt (listOf str) ["noop.ai"] "The domain to serve the website site on.";
 
     acme = {
       enable = mkOpt bool true "Whether or not to automatically fetch and configure SSL certs.";
@@ -26,18 +28,21 @@ in
         }
       '';
 
-      virtualHosts = foldl
-        (hosts: domain: hosts // {
-          "${domain}" = {
-            enableACME = cfg.acme.enable;
-            forceSSL = cfg.acme.enable;
+      virtualHosts =
+        foldl
+        (hosts: domain:
+          hosts
+          // {
+            "${domain}" = {
+              enableACME = cfg.acme.enable;
+              forceSSL = cfg.acme.enable;
 
-            locations."/" = {
-              root = cfg.package;
+              locations."/" = {
+                root = cfg.package;
+              };
             };
-          };
-        })
-        { }
+          })
+        {}
         cfg.domains;
     };
   };

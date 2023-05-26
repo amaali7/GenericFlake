@@ -1,16 +1,20 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
-let cfg = config.plusultra.tools.misc;
-in
 {
-  options.plusultra.tools.misc = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.tools.misc;
+in {
+  options.x-next.tools.misc = with types; {
     enable = mkBoolOpt false "Whether or not to enable common utilities.";
   };
 
   config = mkIf cfg.enable {
-    plusultra.home.configFile."wgetrc".text = "";
+    x-next.home.configFile."wgetrc".text = "";
 
     environment.systemPackages = with pkgs; [
       fzf

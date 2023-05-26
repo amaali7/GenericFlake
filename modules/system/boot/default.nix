@@ -1,11 +1,15 @@
-{ options, config, pkgs, lib, ... }:
-
-with lib;
-with lib.internal;
-let cfg = config.plusultra.system.boot;
-in
 {
-  options.plusultra.system.boot = with types; {
+  options,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.system.boot;
+in {
+  options.x-next.system.boot = with types; {
     enable = mkBoolOpt false "Whether or not to enable booting.";
   };
 

@@ -1,11 +1,14 @@
-{ pkgs, lib, nixos-hardware, ... }:
-
-with lib;
-with lib.internal;
 {
-  imports = [ ./hardware.nix ];
+  pkgs,
+  lib,
+  nixos-hardware,
+  ...
+}:
+with lib;
+with lib.internal; {
+  imports = [./hardware.nix];
 
-  plusultra = {
+  x-next = {
     archetypes = {
       workstation = enabled;
     };
@@ -19,7 +22,7 @@ with lib.internal;
     };
   };
 
-  plusultra.home.extraOptions = {
+  x-next.home.extraOptions = {
     dconf.settings = {
       "org/gnome/shell/extensions/just-perfection" = {
         panel-size = 60;
@@ -33,5 +36,5 @@ with lib.internal;
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "21.11"; # Did you read the comment?
+  system.stateVersion = "23.05"; # Did you read the comment?
 }

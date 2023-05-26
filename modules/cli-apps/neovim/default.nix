@@ -1,12 +1,15 @@
-inputs@{ options, config, lib, pkgs, ... }:
-
+inputs @ {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.internal;
-let
-  cfg = config.plusultra.cli-apps.neovim;
-in
-{
-  options.plusultra.cli-apps.neovim = with types; {
+with lib.internal; let
+  cfg = config.x-next.cli-apps.neovim;
+in {
+  options.x-next.cli-apps.neovim = with types; {
     enable = mkBoolOpt false "Whether or not to enable neovim.";
   };
 
@@ -15,7 +18,7 @@ in
       # @FIXME(jakehamilton): As of today (2022-12-09), `page` no longer works with my Neovim
       # configuration. Either something in my configuration is breaking it or `page` is busted.
       # page
-      plusultra.neovim
+      x-next.neovim
     ];
 
     environment.variables = {
@@ -28,7 +31,7 @@ in
       EDITOR = "nvim";
     };
 
-    plusultra.home = {
+    x-next.home = {
       configFile = {
         "dashboard-nvim/.keep".text = "";
       };

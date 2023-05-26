@@ -1,11 +1,15 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
-let cfg = config.plusultra.tools.nix-ld;
-in
 {
-  options.plusultra.tools.nix-ld = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.tools.nix-ld;
+in {
+  options.x-next.tools.nix-ld = with types; {
     enable = mkBoolOpt false "Whether or not to enable nix-ld.";
   };
 

@@ -1,29 +1,32 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
-let
-  cfg = config.plusultra.desktop.addons.kanshi;
-  user = config.plusultra.user;
-  home = config.users.users.${user.name}.home;
-in
 {
-  options.plusultra.desktop.addons.kanshi = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.desktop.addons.kanshi;
+  user = config.x-next.user;
+  home = config.users.users.${user.name}.home;
+in {
+  options.x-next.desktop.addons.kanshi = with types; {
     enable =
       mkBoolOpt false "Whether to enable Kanshi in the desktop environment.";
   };
 
   config = mkIf cfg.enable {
-    plusultra.home.configFile."kanshi/config".source = ./config;
+    x-next.home.configFile."kanshi/config".source = ./config;
 
-    environment.systemPackages = with pkgs; [ kanshi ];
+    environment.systemPackages = with pkgs; [kanshi];
 
     # configuring kanshi
     systemd.user.services.kanshi = {
       description = "Kanshi output autoconfig ";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
-      environment = { XDG_CONFIG_HOME = "${home}/.config"; };
+      wantedBy = ["graphical-session.target"];
+      partOf = ["graphical-session.target"];
+      environment = {XDG_CONFIG_HOME = "${home}/.config";};
       serviceConfig = {
         ExecCondition = ''
           ${pkgs.bash}/bin/bash -c '[ -n "$WAYLAND_DISPLAY" ]'

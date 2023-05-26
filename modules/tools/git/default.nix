@@ -1,14 +1,17 @@
-{ options, config, pkgs, lib, ... }:
-
-with lib;
-with lib.internal;
-let
-  cfg = config.plusultra.tools.git;
-  gpg = config.plusultra.security.gpg;
-  user = config.plusultra.user;
-in
 {
-  options.plusultra.tools.git = with types; {
+  options,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.tools.git;
+  gpg = config.x-next.security.gpg;
+  user = config.x-next.user;
+in {
+  options.x-next.tools.git = with types; {
     enable = mkBoolOpt false "Whether or not to install and configure git.";
     userName = mkOpt types.str user.fullName "The name to configure git with.";
     userEmail = mkOpt types.str user.email "The email to configure git with.";
@@ -17,9 +20,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ git ];
+    environment.systemPackages = with pkgs; [git];
 
-    plusultra.home.extraOptions = {
+    x-next.home.extraOptions = {
       programs.git = {
         enable = true;
         inherit (cfg) userName userEmail;
@@ -29,10 +32,10 @@ in
           signByDefault = mkIf gpg.enable true;
         };
         extraConfig = {
-          init = { defaultBranch = "main"; };
-          pull = { rebase = true; };
-          push = { autoSetupRemote = true; };
-          core = { whitespace = "trailing-space,space-before-tab"; };
+          init = {defaultBranch = "main";};
+          pull = {rebase = true;};
+          push = {autoSetupRemote = true;};
+          core = {whitespace = "trailing-space,space-before-tab";};
           safe = {
             directory = "${config.users.users.${user.name}.home}/work/config";
           };

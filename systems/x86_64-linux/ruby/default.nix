@@ -1,9 +1,11 @@
-{ lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
 {
-  imports = [ ./hardware.nix ];
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; {
+  imports = [./hardware.nix];
 
   services.zfs = {
     autoSnapshot = {
@@ -18,11 +20,11 @@ with lib.internal;
 
     autoScrub = {
       enable = true;
-      pools = [ "rpool" ];
+      pools = ["rpool"];
     };
   };
 
-  plusultra = {
+  x-next = {
     nix = enabled;
 
     cli-apps = {

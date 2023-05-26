@@ -1,15 +1,17 @@
-{ lib, pkgs, config, ... }:
-
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}: let
   inherit (lib) mkIf mkEnableOption fetchFromGitHub;
   inherit (lib.internal) mkOpt;
 
-  cfg = config.plusultra.services.websites.dotbox;
-in
-{
-  options.plusultra.services.websites.dotbox = with lib.types; {
+  cfg = config.x-next.services.websites.dotbox;
+in {
+  options.x-next.services.websites.dotbox = with lib.types; {
     enable = mkEnableOption "DotBox Website";
-    package = mkOpt package pkgs.plusultra.dotbox-website "The site package to use.";
+    package = mkOpt package pkgs.x-next.dotbox-website "The site package to use.";
     domain = mkOpt str "dotbox.dev" "The domain to serve the website site on.";
 
     acme = {

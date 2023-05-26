@@ -1,19 +1,23 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
-let cfg = config.plusultra.desktop.addons.swappy;
-in
 {
-  options.plusultra.desktop.addons.swappy = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.desktop.addons.swappy;
+in {
+  options.x-next.desktop.addons.swappy = with types; {
     enable =
       mkBoolOpt false "Whether to enable Swappy in the desktop environment.";
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ swappy ];
+    environment.systemPackages = with pkgs; [swappy];
 
-    plusultra.home.configFile."swappy/config".source = ./config;
-    plusultra.home.file."Pictures/screenshots/.keep".text = "";
+    x-next.home.configFile."swappy/config".source = ./config;
+    x-next.home.file."Pictures/screenshots/.keep".text = "";
   };
 }

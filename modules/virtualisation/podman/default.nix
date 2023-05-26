@@ -1,19 +1,23 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
-let cfg = config.plusultra.virtualisation.podman;
-in
 {
-  options.plusultra.virtualisation.podman = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.virtualisation.podman;
+in {
+  options.x-next.virtualisation.podman = with types; {
     enable = mkBoolOpt false "Whether or not to enable Podman.";
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ podman-compose ];
+    environment.systemPackages = with pkgs; [podman-compose];
 
-    plusultra.home.extraOptions = {
-      home.shellAliases = { "docker-compose" = "podman-compose"; };
+    x-next.home.extraOptions = {
+      home.shellAliases = {"docker-compose" = "podman-compose";};
     };
 
     # NixOS 22.05 moved NixOS Containers to a new state directory and the old

@@ -1,26 +1,32 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
-let
-  cfg = config.plusultra.desktop.addons.gtk;
-  gdmCfg = config.services.xserver.displayManager.gdm;
-in
 {
-  options.plusultra.desktop.addons.gtk = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.desktop.addons.gtk;
+  gdmCfg = config.services.xserver.displayManager.gdm;
+in {
+  options.x-next.desktop.addons.gtk = with types; {
     enable = mkBoolOpt false "Whether to customize GTK and apply themes.";
     theme = {
-      name = mkOpt str "Nordic-darker"
+      name =
+        mkOpt str "Nordic-darker"
         "The name of the GTK theme to apply.";
       pkg = mkOpt package pkgs.nordic "The package to use for the theme.";
     };
     cursor = {
-      name = mkOpt str "Bibata-Modern-Ice"
+      name =
+        mkOpt str "Bibata-Modern-Ice"
         "The name of the cursor theme to apply.";
-      pkg = mkOpt package pkgs.plusultra.bibata-cursors "The package to use for the cursor theme.";
+      pkg = mkOpt package pkgs.x-next.bibata-cursors "The package to use for the cursor theme.";
     };
     icon = {
-      name = mkOpt str "Papirus"
+      name =
+        mkOpt str "Papirus"
         "The name of the icon theme to apply.";
       pkg = mkOpt package pkgs.papirus-icon-theme "The package to use for the icon theme.";
     };
@@ -36,7 +42,7 @@ in
       XCURSOR_THEME = cfg.cursor.name;
     };
 
-    plusultra.home.extraOptions = {
+    x-next.home.extraOptions = {
       gtk = {
         enable = true;
 
@@ -65,34 +71,33 @@ in
     # @NOTE(jakehamilton): The GTK and icon themes don't seem to affect recent GDM versions. I've
     # left them here as reference for the future.
     programs.dconf.profiles = mkIf gdmCfg.enable {
-      gdm =
-        let
-          customDconf = pkgs.writeTextFile {
-            name = "gdm-dconf";
-            destination = "/dconf/gdm-custom";
-            text = ''
-              ${optionalString (!gdmCfg.autoSuspend) ''
-                [org/gnome/settings-daemon/plugins/power]
-                sleep-inactive-ac-type='nothing'
-                sleep-inactive-battery-type='nothing'
-                sleep-inactive-ac-timeout=0
-                sleep-inactive-battery-timeout=0
-              ''}
+      gdm = let
+        customDconf = pkgs.writeTextFile {
+          name = "gdm-dconf";
+          destination = "/dconf/gdm-custom";
+          text = ''
+            ${optionalString (!gdmCfg.autoSuspend) ''
+              [org/gnome/settings-daemon/plugins/power]
+              sleep-inactive-ac-type='nothing'
+              sleep-inactive-battery-type='nothing'
+              sleep-inactive-ac-timeout=0
+              sleep-inactive-battery-timeout=0
+            ''}
 
-              [org/gnome/desktop/interface]
-              gtk-theme='${cfg.theme.name}'
-              cursor-theme='${cfg.cursor.name}'
-              icon-theme='${cfg.icon.name}'
-            '';
-          };
+            [org/gnome/desktop/interface]
+            gtk-theme='${cfg.theme.name}'
+            cursor-theme='${cfg.cursor.name}'
+            icon-theme='${cfg.icon.name}'
+          '';
+        };
 
-          customDconfDb = pkgs.stdenv.mkDerivation {
-            name = "gdm-dconf-db";
-            buildCommand = ''
-              ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
-            '';
-          };
-        in
+        customDconfDb = pkgs.stdenv.mkDerivation {
+          name = "gdm-dconf-db";
+          buildCommand = ''
+            ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
+          '';
+        };
+      in
         mkForce (
           pkgs.stdenv.mkDerivation {
             name = "dconf-gdm-profile";

@@ -1,8 +1,10 @@
-{ pkgs, lib, ... }:
-
-with lib;
-with lib.internal;
 {
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+with lib.internal; {
   virtualisation.virtualbox.guest.enable = true;
 
   boot.loader.grub.enable = true;
@@ -11,7 +13,7 @@ with lib.internal;
     WLR_NO_HARDWARE_CURSORS=1
   '';
 
-  plusultra = {
+  x-next = {
     nix = enabled;
 
     apps = {
@@ -21,7 +23,7 @@ with lib.internal;
       vscode = enabled;
     };
 
-    cli-apps = { neovim = enabled; };
+    cli-apps = {neovim = enabled;};
 
     desktop = {
       gnome = {
@@ -49,7 +51,7 @@ with lib.internal;
       networking = enabled;
     };
 
-    services = { printing = enabled; };
+    services = {printing = enabled;};
 
     security = {
       doas = enabled;
@@ -70,5 +72,5 @@ with lib.internal;
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "21.11"; # Did you read the comment?
+  system.stateVersion = "23.05"; # Did you read the comment?
 }

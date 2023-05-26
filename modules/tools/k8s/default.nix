@@ -1,11 +1,15 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
-let cfg = config.plusultra.tools.k8s;
-in
 {
-  options.plusultra.tools.k8s = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.tools.k8s;
+in {
+  options.x-next.tools.k8s = with types; {
     enable =
       mkBoolOpt false "Whether or not to enable common Kubernetes utilities.";
   };

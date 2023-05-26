@@ -1,15 +1,17 @@
-{ lib, pkgs, config, ... }:
-
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}: let
   inherit (lib) mkIf mkEnableOption fetchFromGitHub;
   inherit (lib.internal) mkOpt;
 
-  cfg = config.plusultra.services.websites.traek;
-in
-{
-  options.plusultra.services.websites.traek = with lib.types; {
+  cfg = config.x-next.services.websites.traek;
+in {
+  options.x-next.services.websites.traek = with lib.types; {
     enable = mkEnableOption "traek.app Website";
-    package = mkOpt package pkgs.plusultra.traek-website "The site package to use.";
+    package = mkOpt package pkgs.x-next.traek-website "The site package to use.";
     domain = mkOpt str "traek.app" "The domain to serve the website site on.";
 
     acme = {

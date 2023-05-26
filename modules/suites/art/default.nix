@@ -1,17 +1,20 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
-let
-  cfg = config.plusultra.suites.art;
-in
 {
-  options.plusultra.suites.art = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.suites.art;
+in {
+  options.x-next.suites.art = with types; {
     enable = mkBoolOpt false "Whether or not to enable art configuration.";
   };
 
   config = mkIf cfg.enable {
-    plusultra = {
+    x-next = {
       apps = {
         gimp = enabled;
         inkscape = enabled;

@@ -1,16 +1,19 @@
-{ pkgs, config, lib, ... }:
-
-with lib;
-with lib.internal;
 {
-  imports = [ ./hardware.nix ];
+  pkgs,
+  config,
+  lib,
+  ...
+}:
+with lib;
+with lib.internal; {
+  imports = [./hardware.nix];
 
   services.minio = {
     enable = true;
 
     region = "us-west-1";
 
-    dataDir = [ "/persist/apps/minio/data" ];
+    dataDir = ["/persist/apps/minio/data"];
     configDir = "/persist/apps/minio/config";
 
     rootCredentialsFile = "/persist/apps/minio/credentials";
@@ -54,7 +57,7 @@ with lib.internal;
     7359
   ];
 
-  plusultra = {
+  x-next = {
     nix = enabled;
 
     cli-apps = {
@@ -120,8 +123,8 @@ with lib.internal;
             # For configuration options, see: man 5 smb.conf
             extra-config = {
               "create mask" = "0755";
-              "write list" = config.plusultra.user.name;
-              "read list" = config.plusultra.user.name;
+              "write list" = config.x-next.user.name;
+              "read list" = config.x-next.user.name;
             };
           };
           vault = {
@@ -129,8 +132,8 @@ with lib.internal;
 
             extra-config = {
               "create mask" = "0755";
-              "write list" = config.plusultra.user.name;
-              "read list" = config.plusultra.user.name;
+              "write list" = config.x-next.user.name;
+              "read list" = config.x-next.user.name;
             };
           };
         };
@@ -173,41 +176,42 @@ with lib.internal;
     enable = true;
     recommendedProxySettings = true;
 
-    virtualHosts =
-      let
-        shared-config = {
-          extra-config = {
-            forceSSL = true;
+    virtualHosts = let
+      shared-config = {
+        extra-config = {
+          forceSSL = true;
 
-            sslCertificate = "${config.security.acme.certs."quartz.hamho.me".directory}/fullchain.pem";
-            sslCertificateKey = "${config.security.acme.certs."quartz.hamho.me".directory}/key.pem";
-          };
+          sslCertificate = "${config.security.acme.certs."quartz.hamho.me".directory}/fullchain.pem";
+          sslCertificateKey = "${config.security.acme.certs."quartz.hamho.me".directory}/key.pem";
         };
-      in
-      {
-        "minio.quartz.hamho.me" =
-          network.create-proxy
-            ((network.get-address-parts config.services.minio.consoleAddress)
-              // shared-config);
+      };
+    in {
+      "minio.quartz.hamho.me" =
+        network.create-proxy
+        ((network.get-address-parts config.services.minio.consoleAddress)
+          // shared-config);
 
-        "jellyfin.quartz.hamho.me" = network.create-proxy ({
+      "jellyfin.quartz.hamho.me" = network.create-proxy ({
           # https://jellyfin.org/docs/general/networking/index.html#static-ports
           port = 8096;
 
           # This is required to support sync play.
           proxy-web-sockets = true;
-        } // shared-config);
+        }
+        // shared-config);
 
-        "navidrome.quartz.hamho.me" = network.create-proxy ({
+      "navidrome.quartz.hamho.me" = network.create-proxy ({
           # https://www.navidrome.org/docs/usage/configuration-options/#available-options
           port = 4533;
-        } // shared-config);
+        }
+        // shared-config);
 
-        "vault.quartz.hamho.me" = network.create-proxy
-          ((network.get-address-parts config.services.vault.address)
-            // shared-config);
-      };
+      "vault.quartz.hamho.me" =
+        network.create-proxy
+        ((network.get-address-parts config.services.vault.address)
+          // shared-config);
+    };
   };
 
-  system.stateVersion = "21.11";
+  system.stateVersion = "23.05";
 }

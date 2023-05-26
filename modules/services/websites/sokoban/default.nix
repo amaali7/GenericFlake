@@ -1,15 +1,17 @@
-{ lib, pkgs, config, ... }:
-
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}: let
   inherit (lib) mkIf mkEnableOption fetchFromGitHub;
   inherit (lib.internal) mkOpt;
 
-  cfg = config.plusultra.services.websites.sokoban;
-in
-{
-  options.plusultra.services.websites.sokoban = with lib.types; {
+  cfg = config.x-next.services.websites.sokoban;
+in {
+  options.x-next.services.websites.sokoban = with lib.types; {
     enable = mkEnableOption "Sokoban Website";
-    package = mkOpt package pkgs.plusultra.sokoban-website "The site package to use.";
+    package = mkOpt package pkgs.x-next.sokoban-website "The site package to use.";
     domain = mkOpt str "sokoban.app" "The domain to serve the website site on.";
 
     acme = {

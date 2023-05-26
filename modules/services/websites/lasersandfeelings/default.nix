@@ -1,14 +1,22 @@
-{ lib, pkgs, config, ... }:
-
-let
-  inherit (lib) mkIf mkEnableOption fetchFromGitHub optionalString
-    optionalAttrs;
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}: let
+  inherit
+    (lib)
+    mkIf
+    mkEnableOption
+    fetchFromGitHub
+    optionalString
+    optionalAttrs
+    ;
   inherit (lib.internal) mkOpt;
 
-  cfg = config.plusultra.services.websites.lasersandfeelings;
-in
-{
-  options.plusultra.services.websites.lasersandfeelings = with lib.types; {
+  cfg = config.x-next.services.websites.lasersandfeelings;
+in {
+  options.x-next.services.websites.lasersandfeelings = with lib.types; {
     enable = mkEnableOption "Lasers and Feelings";
     package = mkOpt package pkgs.lasersandfeelings "The package to use.";
     domain = mkOpt str "lasersandfeelings.com" "The domain to serve the website site on.";
@@ -33,13 +41,13 @@ in
       };
 
       groups = optionalAttrs (cfg.group == "lasersandfeelings") {
-        lasersandfeelings = { };
+        lasersandfeelings = {};
       };
     };
 
     systemd.services.lasersandfeelings = {
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = ["network.target"];
+      wantedBy = ["multi-user.target"];
 
       serviceConfig = {
         Type = "simple";

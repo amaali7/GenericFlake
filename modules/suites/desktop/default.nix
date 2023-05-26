@@ -1,22 +1,25 @@
-{ options, config, lib, pkgs, ... }:
-
-with lib;
-with lib.internal;
-let
-  cfg = config.plusultra.suites.desktop;
-in
 {
-  options.plusultra.suites.desktop = with types; {
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
+with lib.internal; let
+  cfg = config.x-next.suites.desktop;
+in {
+  options.x-next.suites.desktop = with types; {
     enable =
       mkBoolOpt false "Whether or not to enable common desktop configuration.";
   };
 
   config = mkIf cfg.enable {
-    plusultra = {
+    x-next = {
       desktop = {
         gnome = enabled;
 
-        addons = { wallpapers = enabled; };
+        addons = {wallpapers = enabled;};
       };
 
       apps = {

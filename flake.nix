@@ -1,30 +1,26 @@
 {
-  description = "Plus Ultra";
+  description = "X-neXt";
 
   inputs = {
     # NixPkgs (nixos-22.11)
-    nixpkgs.url =
-      "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
 
     # NixPkgs Unstable (nixos-unstable)
-    unstable.url =
-      "github:nixos/nixpkgs/nixos-unstable";
+    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Home Manager (release-22.05)
-    home-manager.url =
-      "github:nix-community/home-manager/release-22.11";
+    home-manager.url = "github:nix-community/home-manager/release-22.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # macOS Support (master)
-    darwin.url = "github:lnl7/nix-darwin";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
+    # # macOS Support (master)
+    # darwin.url = "github:lnl7/nix-darwin";
+    # darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     # Hardware Configuration
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
     # Generate System Images
-    nixos-generators.url =
-      "github:nix-community/nixos-generators";
+    nixos-generators.url = "github:nix-community/nixos-generators";
     nixos-generators.inputs.nixpkgs.follows = "nixpkgs";
 
     # Snowfall Lib
@@ -37,8 +33,7 @@
     # flake.inputs.snowfall-lib.follows = "snowfall-lib";
 
     # Comma
-    comma.url =
-      "github:nix-community/comma";
+    comma.url = "github:nix-community/comma";
     comma.inputs.nixpkgs.follows = "unstable";
 
     # System Deployment
@@ -126,15 +121,14 @@
     };
   };
 
-  outputs = inputs:
-    let
-      lib = inputs.snowfall-lib.mkLib {
-        inherit inputs;
-        src = ./.;
-      };
-    in
+  outputs = inputs: let
+    lib = inputs.snowfall-lib.mkLib {
+      inherit inputs;
+      src = ./.;
+    };
+  in
     lib.mkFlake {
-      package-namespace = "plusultra";
+      package-namespace = "x-next";
 
       channels-config.allowUnfree = true;
 
@@ -154,12 +148,12 @@
         nixos-hardware.nixosModules.framework
       ];
 
-      deploy = lib.mkDeploy { inherit (inputs) self; };
+      deploy = lib.mkDeploy {inherit (inputs) self;};
 
       checks =
         builtins.mapAttrs
-          (system: deploy-lib:
-            deploy-lib.deployChecks inputs.self.deploy)
-          inputs.deploy-rs.lib;
+        (system: deploy-lib:
+          deploy-lib.deployChecks inputs.self.deploy)
+        inputs.deploy-rs.lib;
     };
 }
