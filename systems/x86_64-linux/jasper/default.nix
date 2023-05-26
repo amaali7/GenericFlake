@@ -7,19 +7,21 @@
 with lib;
 with lib.internal; {
   imports = [./hardware.nix];
-
+  boot.loader.grub = enabled;
+  boot.loader.grub.version = 2;
+  boot.loader.grub.device = "/dev/sda";
   x-next = {
     archetypes = {
       workstation = enabled;
     };
 
-    apps = {
-      steam = enabled;
-    };
+    # apps = {
+    #   steam = enabled;
+    # };
 
-    system = {
-      zfs = enabled;
-    };
+    # system = {
+    #   zfs = enabled;
+    # };
   };
 
   x-next.home.extraOptions = {

@@ -1,5 +1,11 @@
-{ config, lib, pkgs, modulesPath, nixos-hardware, ... }:
-
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  nixos-hardware,
+  ...
+}:
 # TODO(jakehamilton): Phase most of this out when nixos-hardware
 # is updated with Framework support.
 {
@@ -8,45 +14,44 @@
   ];
 
   boot = {
-    kernelModules = [ "kvm-intel" ];
+    kernelModules = ["kvm-intel"];
 
     initrd = {
-      availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" ];
-      kernelModules = [ ];
+      availableKernelModules = ["xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod"];
+      kernelModules = [];
     };
 
-    extraModulePackages = [ ];
+    extraModulePackages = [];
   };
-
 
   fileSystems = {
     "/" = {
-      device = "rpool/local/root";
-      fsType = "zfs";
+      device = "/dev/disk/by-label/nixos";
+      fsType = "ext4";
     };
 
     "/boot" = {
       device = "/dev/disk/by-label/boot";
-      fsType = "vfat";
+      fsType = "ext4";
     };
 
-    "/nix" = {
-      device = "rpool/local/nix";
-      fsType = "zfs";
-    };
+    # "/nix" = {
+    #   device = "rpool/local/nix";
+    #   fsType = "zfs";
+    # };
 
-    "/home" = {
-      device = "rpool/safe/home";
-      fsType = "zfs";
-    };
+    # "/home" = {
+    #   device = "rpool/safe/home";
+    #   fsType = "zfs";
+    # };
 
-    "/persist" = {
-      device = "rpool/safe/persist";
-      fsType = "zfs";
-    };
+    # "/persist" = {
+    #   device = "rpool/safe/persist";
+    #   fsType = "zfs";
+    # };
   };
 
-  swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
+  swapDevices = [{device = "/dev/disk/by-label/swap";}];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
