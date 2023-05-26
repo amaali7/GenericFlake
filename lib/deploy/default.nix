@@ -14,7 +14,7 @@ in rec {
       lib.foldl
       (result: name: let
         host = hosts.${name};
-        user = host.congig.nix-next.user.name or null;
+        user = host.config.nix-next.user.name or null;
         inherit (host.pkgs) system;
       in
         result
@@ -36,7 +36,8 @@ in rec {
                       sshUser = user;
                     }
                     // lib.optionalAttrs
-                    (host.config.nix-next.security.doas.enable or false) {
+                    (host.config.nix-next.security.doas.enable or false)
+                    {
                       sudo = "doas -u";
                     };
                 };

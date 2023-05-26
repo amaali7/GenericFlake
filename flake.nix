@@ -62,7 +62,7 @@
       systems.hosts.vpn-server.modules = with inputs; [
         nixos-hardware.nixosModules.framework
       ];
-      deploy = lib.mkDeploy {inherit (inputs) self;};
-      checks = builtins.mapAttrs (system: deploy-lib: deploy-lib.deployChecks inputs.self.deploy) inputs.deploy-rs.lib;
+      # deploy = lib.mkDeploy {inherit (inputs) self;};
+      # checks = builtins.mapAttrs (system: deploy-lib: deploy-lib.deployChecks inputs.self.deploy) inputs.deploy-rs.lib;
     };
 }
