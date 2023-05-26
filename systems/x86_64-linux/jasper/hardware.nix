@@ -15,7 +15,13 @@
 
   boot = {
     kernelModules = ["kvm-intel"];
-
+    loader = {
+      grub = {
+        enable = true;
+        version = 2;
+        device = "/dev/sda";
+      };
+    };
     initrd = {
       availableKernelModules = ["xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod"];
       kernelModules = [];
