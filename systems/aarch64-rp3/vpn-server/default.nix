@@ -11,9 +11,9 @@
     ./hardware.nix
   ];
 
-  nix-next = {
-    archtyps.rasp3 = enabled;
-  };
+  # nix-next = {
+  #   archtyps.rasp3 = enabled;
+  # };
 
   networking.hostName = "vip-0"; # Define your hostname.
   # Pick only one of the below networking options.
